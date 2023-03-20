@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import {items} from ./
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -32,10 +33,26 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   });
 
   // Get the deployed contract
-  // const yourContract = await hre.ethers.getContract("YourContract", deployer);
+  const yourContract = await hre.ethers.getContract("YourContract", deployer);
+  for (let i = 0; i < items.length; i++) {
+    const transaction = await yourContract.connect(deployer).list(
+      items[i].id,
+      items[i].name,
+      items[i].category,
+      items[i].image,
+      tokens(items[i].price),
+      items[i].rating,
+      items[i].stock,
+    )
+
+    await transaction.wait()
+
+    console.log(`Listed item ${items[i].id}: ${items[i].name}`)
+  }
 };
 
 export default deployYourContract;
+
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract

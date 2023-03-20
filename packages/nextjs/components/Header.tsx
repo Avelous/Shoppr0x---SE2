@@ -45,12 +45,12 @@ export const Header = () => {
           Debug Contracts
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink href="/example-ui">
           <SparklesIcon className="h-4 w-4" />
           Example UI
         </NavLink>
-      </li>
+      </li> */}
     </>
   );
 
@@ -83,8 +83,8 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </Link>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Scaffold-eth</span>
-            <span className="text-xs">Ethereum dev stack</span>
+            <span className="font-bold leading-tight">Shopper0x</span>
+            <span className="text-xs">Built with SE-2</span>
           </div>
         </div>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>

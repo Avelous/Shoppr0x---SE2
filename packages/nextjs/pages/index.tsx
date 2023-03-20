@@ -1,9 +1,73 @@
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { getAccount, getContract, readContract } from "@wagmi/core";
 import type { NextPage } from "next";
+import { useContract, useProvider } from "wagmi";
 import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { Navigation } from "~~/components/home/Navigation";
+import { Product } from "~~/components/home/Product";
+import { Section } from "~~/components/home/Section";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
+  const provider = useProvider();
+  const account = getAccount();
+
+  const [toggle, setToggle] = useState(false);
+  const [electronics, setElectronics] = useState(null);
+  const [clothing, setClothing] = useState(null);
+  const [toys, setToys] = useState(null);
+  const [item, setItem] = useState({});
+
+  let contractAddress;
+  let contractABI;
+
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo("YourContract");
+  if (deployedContractData) {
+    ({ address: contractAddress, abi: contractABI } = deployedContractData);
+  }
+
+  const contract = useContract({
+    address: contractAddress,
+    abi: contractABI,
+    signerOrProvider: provider,
+  });
+
+  console.log(contract);
+
+  const togglePop = item => {
+    setItem(item);
+    toggle ? setToggle(false) : setToggle(true);
+  };
+
+  const loadBlockchainData = async () => {
+    const items = [];
+
+    for (var i = 0; i < 9; i++) {
+      const item = await readContract({
+        address: contractAddress,
+        abi: contractABI,
+        functionName: "items",
+        args: [i],
+      });
+      items.push(item);
+    }
+    console.log(items);
+
+    const electronics = items.filter(item => item.category === "electronics");
+    const clothing = items.filter(item => item.category === "clothing");
+    const toys = items.filter(item => item.category === "toys");
+
+    setElectronics(electronics);
+    setClothing(clothing);
+    setToys(toys);
+  };
+
+  useEffect(() => {
+    if (deployedContractData) loadBlockchainData();
+  }, [contractAddress, contractABI]);
+
   return (
     <>
       <Head>
@@ -11,7 +75,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Created with 🏗 scaffold-eth" />
       </Head>
 
-      <div className="flex items-center flex-col flex-grow pt-10">
+      {/* <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
@@ -50,7 +114,22 @@ const Home: NextPage = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
+
+      <div>
+        <Navigation account={account.address} />
+
+        {electronics && clothing && toys && (
+          <>
+            <Section title={"Clothing & Jewelry"} items={clothing} togglePop={togglePop} />
+            <Section title={"Electronics & Gadgets"} items={electronics} togglePop={togglePop} />
+            <Section title={"Toys & Gaming"} items={toys} togglePop={togglePop} />
+          </>
+        )}
+
+        {toggle && (
+          <Product item={item} account={account.address} shoppr0x={contract} abi={contractABI} togglePop={togglePop} />
+        )}
       </div>
     </>
   );
