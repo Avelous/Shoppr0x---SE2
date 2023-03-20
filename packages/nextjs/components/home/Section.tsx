@@ -2,7 +2,13 @@
 import { Rating } from "./Rating";
 import { ethers } from "ethers";
 
-export const Section = ({ title, items, togglePop }) => {
+interface SectionProps {
+  title: any;
+  items: any;
+  togglePop: (item: any) => void;
+}
+
+export const Section = ({ title, items, togglePop }: SectionProps) => {
   return (
     <div
       className=""
@@ -19,7 +25,7 @@ export const Section = ({ title, items, togglePop }) => {
       <hr />
 
       <div className="grid md:grid-cols-3 grid-cols-2 text-sm mt-5 justify-start">
-        {items.map((item, index) => (
+        {items.map((item: any, index: number) => (
           <div className="w-5/6 hover:shadow-xl cursor-pointer" key={index} onClick={() => togglePop(item)}>
             <div>
               <img src={item.image} alt="Item" />

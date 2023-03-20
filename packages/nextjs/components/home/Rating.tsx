@@ -2,7 +2,11 @@ import Image from "next/image";
 import star_regular from "./assets/star-regular.svg";
 import star_solid from "./assets/star-solid.svg";
 
-export const Rating = ({ value }) => {
+interface RatingProps {
+  value: any;
+}
+
+export const Rating = ({ value }: RatingProps) => {
   return (
     <div className="flex">
       <Image src={value >= 1 ? star_solid : star_regular} width={10} alt="Star" />

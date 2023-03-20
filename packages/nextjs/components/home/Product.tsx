@@ -7,14 +7,33 @@ import { prepareWriteContract, writeContract } from "@wagmi/core";
 import { ethers } from "ethers";
 import { notification } from "~~/utils/scaffold-eth";
 
-export const Product = ({ item, account, shoppr0x, abi, togglePop }) => {
-  const [order, setOrder] = useState(null);
-  const [hasBought, setHasBought] = useState(false);
+interface item {
+  id: number;
+  cost: any;
+  image: any;
+  name: any;
+  rating: any;
+  stock: any;
+  description: any;
+  address: any;
+}
+
+interface ProductProps {
+  item: item; // replace 'any' with the type of your item object
+  account: any;
+  shoppr0x: any;
+  abi: any; // replace 'any' with the type of your abi object
+  togglePop: (item: any) => void;
+}
+
+export const Product = ({ item, account, shoppr0x, abi, togglePop }: ProductProps) => {
+  const [order, setOrder] = useState<any>(null);
+  const [hasBought, setHasBought] = useState<any>(false);
 
   const fetchDetails = async () => {
-    const events = await shoppr0x.queryFilter("Buy");
+    const events: any = await shoppr0x.queryFilter("Buy");
     const orders = events.filter(
-      event => event.args.buyer === account && event.args.itemId.toString() === item.id.toString(),
+      (event: any) => event.args.buyer === account && event.args.itemId.toString() === item.id.toString(),
     );
 
     if (orders.length === 0) return;
@@ -41,7 +60,7 @@ export const Product = ({ item, account, shoppr0x, abi, togglePop }) => {
       setHasBought(true);
       notification.success(<p className="mt-0 mb-1gi">Succussful bought {item.name} </p>);
     } catch (error) {
-      notification.error(<p className="mt-0 mb-1gi">Error: {error.message} </p>);
+      notification.error(`Error: ${error}`);
     }
   };
 

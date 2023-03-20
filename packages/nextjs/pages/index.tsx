@@ -8,18 +8,29 @@ import { Product } from "~~/components/home/Product";
 import { Section } from "~~/components/home/Section";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
+interface item {
+  id: number;
+  cost: any;
+  image: any;
+  name: any;
+  rating: any;
+  stock: any;
+  description: any;
+  address: any;
+}
+
 const Home: NextPage = () => {
   const provider = useProvider();
   const account = getAccount();
 
   const [toggle, setToggle] = useState(false);
-  const [electronics, setElectronics] = useState(null);
-  const [clothing, setClothing] = useState(null);
-  const [toys, setToys] = useState(null);
-  const [item, setItem] = useState({});
+  const [electronics, setElectronics] = useState<any>(null);
+  const [clothing, setClothing] = useState<any>(null);
+  const [toys, setToys] = useState<any>(null);
+  const [item, setItem] = useState<item | any>({});
 
-  let contractAddress;
-  let contractABI;
+  let contractAddress: any;
+  let contractABI: any;
 
   const { data: deployedContractData } = useDeployedContractInfo("YourContract");
   if (deployedContractData) {
@@ -34,7 +45,7 @@ const Home: NextPage = () => {
 
   console.log(contract);
 
-  const togglePop = item => {
+  const togglePop = (item: any) => {
     setItem(item);
     toggle ? setToggle(false) : setToggle(true);
   };
@@ -115,7 +126,7 @@ const Home: NextPage = () => {
         </div> */}
 
       <div>
-        <Navigation account={account.address} />
+        <Navigation />
 
         {electronics && clothing && toys && (
           <>
