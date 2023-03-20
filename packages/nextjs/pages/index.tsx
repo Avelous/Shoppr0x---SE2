@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
+import { LoadingOutlined } from "@ant-design/icons";
 import { getAccount, readContract } from "@wagmi/core";
 import type { NextPage } from "next";
 import { useContract, useProvider } from "wagmi";
@@ -32,7 +33,7 @@ const Home: NextPage = () => {
   let contractAddress: any;
   let contractABI: any;
 
-  const { data: deployedContractData } = useDeployedContractInfo("YourContract");
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo("YourContract");
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -75,13 +76,13 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (deployedContractData) loadBlockchainData();
-  }, [deployedContractData, contractABI]);
+  }, [deployedContractData, contractABI, account, provider]);
 
   return (
     <>
       <Head>
-        <title>Scaffold-eth App</title>
-        <meta name="description" content="Created with 🏗 scaffold-eth" />
+        <title>Shoppr0x</title>
+        <meta name="description" content="Shop products" />
       </Head>
 
       {/* <div className="flex items-center flex-col flex-grow pt-10">
@@ -128,12 +129,16 @@ const Home: NextPage = () => {
       <div>
         <Navigation />
 
-        {electronics && clothing && toys && (
+        {electronics && clothing && toys ? (
           <>
             <Section title={"Clothing & Jewelry"} items={clothing} togglePop={togglePop} />
             <Section title={"Electronics & Gadgets"} items={electronics} togglePop={togglePop} />
             <Section title={"Toys & Gaming"} items={toys} togglePop={togglePop} />
           </>
+        ) : (
+          <div className="p-32 flex justify-center items-center text-2xl">
+            <LoadingOutlined />
+          </div>
         )}
 
         {toggle && (
