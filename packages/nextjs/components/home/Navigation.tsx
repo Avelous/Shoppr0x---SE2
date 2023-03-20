@@ -1,4 +1,4 @@
-export const Navigation = ({ account, setAccount }) => {
+export const Navigation = () => {
   return (
     <nav>
       <ul className="md:w-3/5 lg:1-2 flex md:gap-6 mx-auto bg-base-300 md:text-sm text-xs justify-around  rounded-b-xl md:p-4 p-3 mb-10">

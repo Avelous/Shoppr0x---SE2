@@ -1,4 +1,4 @@
-export const items: object[] = [
+export const items = [
   {
     id: 1,
     name: "Camera",

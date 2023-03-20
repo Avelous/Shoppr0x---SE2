@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
-import { getAccount, getContract, readContract } from "@wagmi/core";
+import { getAccount, readContract } from "@wagmi/core";
 import type { NextPage } from "next";
 import { useContract, useProvider } from "wagmi";
-import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { Navigation } from "~~/components/home/Navigation";
 import { Product } from "~~/components/home/Product";
 import { Section } from "~~/components/home/Section";
@@ -23,7 +21,7 @@ const Home: NextPage = () => {
   let contractAddress;
   let contractABI;
 
-  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo("YourContract");
+  const { data: deployedContractData } = useDeployedContractInfo("YourContract");
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -44,7 +42,7 @@ const Home: NextPage = () => {
   const loadBlockchainData = async () => {
     const items = [];
 
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       const item = await readContract({
         address: contractAddress,
         abi: contractABI,
@@ -66,7 +64,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (deployedContractData) loadBlockchainData();
-  }, [contractAddress, contractABI]);
+  }, [deployedContractData, contractABI]);
 
   return (
     <>
